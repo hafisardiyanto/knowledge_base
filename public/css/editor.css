@@ -1,0 +1,141 @@
+.editor-layout {
+    display: flex;
+    height: calc(100vh - 120px);
+    gap: 20px;
+}
+
+.sidebar-categories {
+    width: 300px;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.cat-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cat-header span {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #1f2937;
+}
+
+.cat-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.cat-group {
+    margin-bottom: 10px;
+}
+
+.cat-item {
+    padding: 10px 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: grab;
+    background: #fdfdfd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.cat-item-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+.cat-item-right {
+    display: flex;
+    align-items: center;
+    color: #6b7280;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.cat-item-right:hover {
+    color: #3b82f6;
+}
+
+.article-list {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 20px;
+}
+
+.article-item {
+    padding: 8px 10px;
+    border-left: 2px solid #3b82f6;
+    cursor: pointer;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+}
+
+.article-item:hover {
+    background: #f3f4f6;
+}
+
+.article-add-btn {
+    padding: 8px 10px;
+    border-left: 2px solid transparent;
+    cursor: pointer;
+    color: #9ca3af;
+    font-size: 0.9rem;
+    font-style: italic;
+    transition: color 0.2s;
+}
+
+.article-add-btn:hover {
+    color: #3b82f6;
+}
+
+.editor-main {
+    flex: 1;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ql-container {
+    flex: 1;
+    font-size: 1rem;
+    min-height: 0;
+}
+
+.editor-top {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.editor-top input,
+.editor-top select {
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    outline: none;
+}
