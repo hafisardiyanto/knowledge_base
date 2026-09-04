@@ -1,7 +1,18 @@
 @foreach($articles->where('parent_id', $parentId) as $article)
     <div class="article-item" onclick="loadArticle({{ $article->id }})"
         style="margin-left: {{ $depth * 15 }}px; display: flex; justify-content: space-between; align-items: center;">
-        <div style="flex:1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $article->title }}</div>
+        <div style="flex:1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            @if($article->status === 'Published')
+                <span id="badge-{{ $article->id }}"
+                    style="font-size:9px; padding:2px 4px; border-radius:3px; background:#10b981; color:white; margin-right:5px;">●
+                    Published</span>
+            @else
+                <span id="badge-{{ $article->id }}"
+                    style="font-size:9px; padding:2px 4px; border-radius:3px; background:#ef4444; color:white; margin-right:5px;">●
+                    Draft</span>
+            @endif
+            {{ $article->title }}
+        </div>
         <div style="display: flex; align-items: center; gap: 5px;">
             <div onclick="event.stopPropagation(); addArticle({{ $article->category_id }}, {{ $article->id }})"
                 style="color: #9ca3af; font-size: 1.1rem; padding: 0 5px;" title="Tambah Sub Menu">+</div>

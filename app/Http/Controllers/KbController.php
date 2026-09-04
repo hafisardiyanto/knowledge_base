@@ -81,6 +81,7 @@ class KbController extends Controller
             'title' => $request->title,
             'slug' => \Illuminate\Support\Str::slug($request->title . '-' . uniqid()),
             'type' => 'Dokumentasi',
+            'status' => 'Draft',
             'order_position' => Article::where('category_id', $request->category_id)->max('order_position') + 1
         ]);
         return response()->json($article);
@@ -108,6 +109,24 @@ class KbController extends Controller
         ]);
 
         return response()->json(['success' => true]);
+    }
+
+    public function publishAll(Request $request, Project $project)
+    {
+        Article::where('project_id', $project->id)->update(['status' => 'Published']);
+        return response()->json(['success' => true, 'message' => 'Seluruh artikel berhasil di-publish!']);
+    }
+
+    public function togglePublish(Request $request, Article $article)
+    {
+        $newStatus = $article->status === 'Published' ? 'Draft' : 'Published';
+        $article->update(['status' => $newStatus]);
+
+        return response()->json([
+            'success' => true,
+            'status' => $newStatus,
+            'message' => 'Status artikel berhasil diubah menjadi ' . $newStatus
+        ]);
     }
 
     public function importDocx(Request $request, Project $project)
@@ -250,9 +269,8 @@ class KbController extends Controller
             ),
 
             'content' => $articleData['content'] ?? '',
-
             'type' => 'Dokumentasi',
-
+            'status' => 'Draft',
             'order_position' => $orderPosition
         ]);
 
@@ -284,7 +302,12 @@ class KbController extends Controller
 
     public function generateHtml(Request $request, Project $project)
     {
-        $project->load('articles', 'categories');
+        $project->load([
+            'articles' => function ($q) {
+                $q->where('status', 'Published')->orderBy('order_position', 'asc');
+            },
+            'categories'
+        ]);
 
         $zipFile = public_path($project->slug . '-KB.zip');
         $zip = new \ZipArchive();
@@ -335,4 +358,17 @@ class KbController extends Controller
         return back()->with('error', 'Gagal membuat file ZIP');
     }
 
+    public function showOnlineKb(Request $request, $slug)
+    {
+        $project = Project::where('slug', $slug)->firstOrFail();
+
+        $project->load([
+            'articles' => function ($q) {
+                $q->where('status', 'Published')->orderBy('order_position', 'asc');
+            },
+            'categories'
+        ]);
+
+        return view('export.index', compact('project'));
+    }
 }

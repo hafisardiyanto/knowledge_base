@@ -40,9 +40,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('knowledge-base/{project}/delete-article/{article}', [KbController::class, 'deleteArticle'])->name('kb.article.delete');
 
     Route::post('knowledge-base/{project}/save', [KbController::class, 'save'])->name('kb.save');
-    Route::post('knowledge-base/{project}/import', [KbController::class, 'importDocx'])->name('kb.import');
+    Route::post('/kb/import/{project}', [KbController::class, 'importDocx'])->name('kb.import');
+    Route::post('/kb/project/{project}/publish-all', [KbController::class, 'publishAll'])->name('kb.publish-all');
+    Route::post('/kb/article/{article}/toggle-publish', [KbController::class, 'togglePublish'])->name('kb.toggle-publish');
     Route::post('knowledge-base/{project}/generate', [KbController::class, 'generateHtml'])->name('kb.generate');
 
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
 });
+
+// Single Page Online KB (Public)
+Route::get('/docs/{slug}', [KbController::class, 'showOnlineKb'])->name('kb.online');
