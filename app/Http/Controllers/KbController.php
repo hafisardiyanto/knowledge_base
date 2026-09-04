@@ -362,6 +362,12 @@ class KbController extends Controller
     {
         $project = Project::where('slug', $slug)->firstOrFail();
 
+        // Prevent access if there are no published articles at all
+        $publishedExists = $project->articles()->where('status', 'Published')->exists();
+        if (!$publishedExists) {
+            abort(404, 'Knowledge Base ini belum dipublikasikan (Masih berstatus Draft).');
+        }
+
         $project->load([
             'articles' => function ($q) {
                 $q->where('status', 'Published')->orderBy('order_position', 'asc');
