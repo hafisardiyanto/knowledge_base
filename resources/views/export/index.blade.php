@@ -187,19 +187,27 @@
             color: var(--text-light);
             line-height: 1.6;
         }
-    </style>
+
         /* Extra Quill layout fixes */
         .article-section {
             display: none;
         }
+
         .article-section.active {
             display: block;
             animation: fadeIn 0.3s ease;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Quill Light Mode overrides */
@@ -265,6 +273,40 @@
             font-size: 0.9rem;
             margin: 15px 0;
         }
+
+        /* =========================================================
+           NESTED ARTICLE DROPDOWN
+           ========================================================= */
+        .sidebar-article { margin: 0; padding: 0; }
+        .sidebar-article-row {
+            display: flex; align-items: center; width: 100%; min-height: 34px;
+        }
+        .sidebar-article-row > .nav-link {
+            flex: 1; color: var(--text-light); text-decoration: none;
+            font-size: 0.9rem; padding: 7px 6px; overflow: hidden;
+            text-overflow: ellipsis; white-space: nowrap;
+        }
+        .sidebar-article-row > .nav-link:hover { color: var(--text); }
+        .article-toggle {
+            width: 28px; height: 28px; border: none; background: transparent;
+            color: #a1a1aa; cursor: pointer; display: flex; align-items: center;
+            justify-content: center; border-radius: 5px; flex-shrink: 0;
+        }
+        .article-toggle:hover { background: var(--hover-bg); color: var(--text); }
+        .article-toggle .chevron { font-size: 12px; transition: transform 0.2s ease; }
+        .article-toggle[aria-expanded="true"] .chevron { transform: rotate(90deg); }
+        
+        .sidebar-children {
+            display: none; margin-left: 18px;
+            border-left: 1px solid var(--border); padding-left: 8px;
+        }
+        .sidebar-children.open { display: block; }
+        
+        .sidebar-article[data-level="2"] { margin-left: 0; }
+        .sidebar-article[data-level="3"] { margin-left: 4px; }
+        .sidebar-article[data-level="4"] { margin-left: 4px; }
+        .sidebar-article[data-level="5"] { margin-left: 4px; }
+        .sidebar-article[data-level="6"] { margin-left: 4px; }
     </style>
 </head>
 
@@ -273,13 +315,14 @@
 
     <div class="main-content">
         <div class="content-wrapper">
-            
+
             <!-- Home Section -->
             <div id="article-home" class="article-section active">
                 <h1 class="page-title">{{ $project->name }}</h1>
                 <p class="page-desc">{{ $project->description }}</p>
 
-                <div style="margin-top: 40px; padding: 20px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa;">
+                <div
+                    style="margin-top: 40px; padding: 20px; border: 1px solid var(--border); border-radius: 8px; background: #fafafa;">
                     <h3 style="margin-bottom: 15px; font-weight: 600; color: #18181b;">Getting Started</h3>
                     <p style="color: var(--text-light); font-size: 0.95rem;">Select an article from the sidebar to start
                         reading.</p>
@@ -288,15 +331,15 @@
 
             <!-- Articles -->
             @foreach($project->articles as $article)
-            <div id="article-{{ $article->id }}" class="article-section">
-                <div class="article-meta">{{ $article->type ?? 'Dokumentasi' }}</div>
-                <h1 class="page-title">{{ $article->title }}</h1>
-                <div class="ql-snow">
-                    <div class="ql-editor">
-                        {!! $article->content !!}
+                <div id="article-{{ $article->id }}" class="article-section">
+                    <div class="article-meta">{{ $article->type ?? 'Dokumentasi' }}</div>
+                    <h1 class="page-title">{{ $article->title }}</h1>
+                    <div class="ql-snow">
+                        <div class="ql-editor">
+                            {!! $article->content !!}
+                        </div>
                     </div>
                 </div>
-            </div>
             @endforeach
 
         </div>
@@ -308,7 +351,7 @@
             document.querySelectorAll('.article-section').forEach(el => el.classList.remove('active'));
             // Remove active state from nav
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-            
+
             // Show target article
             const target = document.getElementById('article-' + id);
             if (target) {
@@ -316,7 +359,7 @@
             } else {
                 document.getElementById('article-home').classList.add('active');
             }
-            
+
             // Highlight nav item
             const nav = document.querySelector('a[href="#article-' + id + '"]');
             if (nav) {
@@ -328,13 +371,13 @@
                     parentDetails = parentDetails.parentElement.closest('details');
                 }
             }
-            
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         window.addEventListener('hashchange', () => {
             let hash = window.location.hash.substring(1); // remove #
-            if(hash && hash.startsWith('article-')) {
+            if (hash && hash.startsWith('article-')) {
                 let id = hash.replace('article-', '');
                 showArticle(id);
             } else {
@@ -343,12 +386,37 @@
         });
 
         // initial load
-        if(window.location.hash && window.location.hash.startsWith('#article-')) {
+        if (window.location.hash && window.location.hash.startsWith('#article-')) {
             let id = window.location.hash.replace('#article-', '');
             showArticle(id);
         } else {
             showArticle('home');
         }
+
+        // Dropdown Logic
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.article-toggle').forEach(function (button) {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const targetId = button.getAttribute('data-target');
+                    const target = document.getElementById(targetId);
+
+                    if (!target) return;
+
+                    const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+                    if (isOpen) {
+                        button.setAttribute('aria-expanded', 'false');
+                        target.classList.remove('open');
+                    } else {
+                        button.setAttribute('aria-expanded', 'true');
+                        target.classList.add('open');
+                    }
+                });
+            });
+        });
     </script>
 </body>
 

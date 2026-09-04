@@ -30,4 +30,9 @@ class Article extends Model
     {
         return $this->hasMany(Article::class, 'parent_id')->orderBy('order_position', 'asc');
     }
+
+    public function childrenRecursive()
+    {
+        return $this->children()->with('childrenRecursive');
+    }
 }

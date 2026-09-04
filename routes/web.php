@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('knowledge-base/{project}/delete-article/{article}', [KbController::class, 'deleteArticle'])->name('kb.article.delete');
 
     Route::post('knowledge-base/{project}/save', [KbController::class, 'save'])->name('kb.save');
+    Route::post('knowledge-base/{project}/import', [KbController::class, 'importDocx'])->name('kb.import');
     Route::post('knowledge-base/{project}/generate', [KbController::class, 'generateHtml'])->name('kb.generate');
 
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');

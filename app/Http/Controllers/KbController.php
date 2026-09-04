@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use App\Models\Project;
 use App\Models\Category;
 use App\Models\Article;
-use Illuminate\Http\Request;
 
 class KbController extends Controller
 {
@@ -108,6 +110,178 @@ class KbController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function importDocx(Request $request, Project $project)
+    {
+        $tree = $request->input('tree');
+
+        if (!is_array($tree) || empty($tree)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data hasil import Word tidak valid.'
+            ], 400);
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            /*
+            |--------------------------------------------------------------------------
+            | CATEGORY ORDER
+            |--------------------------------------------------------------------------
+            */
+
+            $orderCategory = (
+                Category::where('project_id', $project->id)
+                    ->max('order_position') ?? 0
+            ) + 1;
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | IMPORT CATEGORY
+            |--------------------------------------------------------------------------
+            */
+
+            foreach ($tree as $categoryData) {
+
+                $categoryName = trim(
+                    $categoryData['name'] ?? ''
+                );
+
+                if ($categoryName === '') {
+                    continue;
+                }
+
+                $category = Category::create([
+                    'project_id' => $project->id,
+                    'name' => $categoryName,
+                    'order_position' => $orderCategory++
+                ]);
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | IMPORT ARTICLE
+                |--------------------------------------------------------------------------
+                */
+
+                $orderArticle = 1;
+
+                foreach (
+                    ($categoryData['articles'] ?? [])
+                    as $articleData
+                ) {
+
+                    $this->createImportedArticle(
+                        project: $project,
+                        category: $category,
+                        articleData: $articleData,
+                        parentId: null,
+                        orderPosition: $orderArticle++
+                    );
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Dokumen Word berhasil diimport.'
+            ]);
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            report($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal melakukan import dokumen Word.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    private function createImportedArticle(
+        Project $project,
+        Category $category,
+        array $articleData,
+        $parentId = null,
+        $orderPosition = 1
+    ) {
+        $title = trim(
+            $articleData['title'] ?? ''
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Abaikan artikel tanpa judul
+        |--------------------------------------------------------------------------
+        */
+
+        if ($title === '') {
+            $title = 'Artikel Import';
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CREATE ARTICLE
+        |--------------------------------------------------------------------------
+        */
+
+        $article = Article::create([
+            'project_id' => $project->id,
+
+            'category_id' => $category->id,
+
+            /*
+            | null  = artikel utama
+            | ID    = child dari artikel sebelumnya
+            */
+            'parent_id' => $parentId,
+
+            'title' => $title,
+
+            'slug' => Str::slug(
+                $title . '-' . uniqid()
+            ),
+
+            'content' => $articleData['content'] ?? '',
+
+            'type' => 'Dokumentasi',
+
+            'order_position' => $orderPosition
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CREATE CHILD ARTICLE
+        |--------------------------------------------------------------------------
+        */
+
+        $childOrder = 1;
+
+        foreach (
+            ($articleData['children'] ?? [])
+            as $childArticle
+        ) {
+
+            $this->createImportedArticle(
+                project: $project,
+                category: $category,
+                articleData: $childArticle,
+                parentId: $article->id,
+                orderPosition: $childOrder++
+            );
+        }
+
+        return $article;
+    }
+
     public function generateHtml(Request $request, Project $project)
     {
         $project->load('articles', 'categories');
@@ -120,6 +294,26 @@ class KbController extends Controller
 
             // Compile single-page SPA view
             $indexHtml = view('export.index', compact('project'))->render();
+
+            // Extract base64 images to physical files in the ZIP to save massive space
+            $indexHtml = preg_replace_callback('/src=["\']data:image\/(.*?);base64,(.*?)["\']/is', function ($matches) use ($zip, $folderName) {
+                $ext = strtolower($matches[1]);
+                if ($ext === 'jpeg') {
+                    $ext = 'jpg';
+                }
+
+                $base64Data = $matches[2];
+                $binaryData = base64_decode($base64Data);
+
+                // Deduplicate identical images to save even more space
+                $filename = 'img_' . md5($binaryData) . '.' . $ext;
+
+                // Save inside an images folder in ZIP
+                $zip->addFromString($folderName . '/images/' . $filename, $binaryData);
+
+                return 'src="images/' . $filename . '"';
+            }, $indexHtml);
+
             // Put it inside the project folder
             $zip->addFromString($folderName . '/index.html', $indexHtml);
 
