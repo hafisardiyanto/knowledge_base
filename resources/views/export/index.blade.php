@@ -8,306 +8,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #f4f4f5;
-            /* Abu-abu terang untuk konten */
-            --sidebar-bg: #fafafa;
-            /* Putih sedikit abu untuk sidebar */
-            --border: #e4e4e7;
-            --text: #27272a;
-            --text-light: #71717a;
-            --accent: #09090b;
-            --hover-bg: #ececf1;
-        }
+    @php
+        $isExport = $isExport ?? false;
+    @endphp
 
-        * {
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #d4d4d8;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a1a1aa;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            border-right: 1px solid var(--border);
-            overflow-y: auto;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-        }
-
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            background: var(--sidebar-bg);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar-header::before {
-            content: '◒';
-            font-size: 1.4rem;
-            color: var(--accent);
-        }
-
-        .site-title {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--text);
-            text-decoration: none;
-        }
-
-        .sidebar-content {
-            padding: 20px 0;
-        }
-
-        .category-block {
-            margin-bottom: 24px;
-        }
-
-        .category-title {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-light);
-            padding: 0 20px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .sidebar-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 6px 20px;
-            color: var(--text-light);
-            transition: background 0.2s, color 0.2s;
-            cursor: pointer;
-        }
-
-        .sidebar-item:hover {
-            color: var(--text);
-            background: var(--hover-bg);
-        }
-
-        .sidebar-item a {
-            color: inherit;
-            text-decoration: none;
-            font-size: 0.9rem;
-            flex: 1;
-            display: block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .sidebar-item a.active {
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        /* Dropdown styles */
-        details.sidebar-details summary {
-            list-style: none;
-        }
-
-        details.sidebar-details summary::-webkit-details-marker {
-            display: none;
-        }
-
-        details.sidebar-details .chevron {
-            font-size: 1.2rem;
-            line-height: 1;
-            color: #a1a1aa;
-            transition: transform 0.2s;
-            pointer-events: none;
-        }
-
-        details.sidebar-details[open]>summary .chevron {
-            transform: rotate(90deg);
-            color: var(--text);
-        }
-
-        details.sidebar-details[open]>summary {
-            color: var(--text);
-        }
-
-        .main-content {
-            flex: 1;
-            margin-left: 280px;
-            padding: 50px;
-            background: var(--bg);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-        }
-
-        .content-wrapper {
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .page-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            margin-bottom: 1rem;
-            color: #18181b;
-        }
-
-        .page-desc {
-            font-size: 1.05rem;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-
-        /* Extra Quill layout fixes */
-        .article-section {
-            display: none;
-        }
-
-        .article-section.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Quill Light Mode overrides */
-        .ql-editor {
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: #3f3f46;
-        }
-
-        .ql-editor img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin: 15px 0;
-            border: 1px solid var(--border);
-        }
-
-        .ql-editor h1,
-        .ql-editor h2,
-        .ql-editor h3 {
-            color: #18181b;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .ql-editor h2 {
-            font-size: 1.6rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-        }
-
-        .ql-editor p {
-            margin-bottom: 1.2em;
-        }
-
-        .ql-editor a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .ql-editor a:hover {
-            text-decoration: underline;
-        }
-
-        .ql-editor blockquote {
-            border-left: 4px solid #d4d4d8;
-            margin-left: 0;
-            padding-left: 15px;
-            color: #71717a;
-            font-style: italic;
-        }
-
-        .ql-editor pre {
-            background: #f1f5f9;
-            color: #334155;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            overflow-x: auto;
-            font-family: monospace;
-            font-size: 0.9rem;
-            margin: 15px 0;
-        }
-
-        /* =========================================================
-           NESTED ARTICLE DROPDOWN
-           ========================================================= */
-        .sidebar-article { margin: 0; padding: 0; }
-        .sidebar-article-row {
-            display: flex; align-items: center; width: 100%; min-height: 34px;
-        }
-        .sidebar-article-row > .nav-link {
-            flex: 1; color: var(--text-light); text-decoration: none;
-            font-size: 0.9rem; padding: 7px 6px; overflow: hidden;
-            text-overflow: ellipsis; white-space: nowrap;
-        }
-        .sidebar-article-row > .nav-link:hover { color: var(--text); }
-        .article-toggle {
-            width: 28px; height: 28px; border: none; background: transparent;
-            color: #a1a1aa; cursor: pointer; display: flex; align-items: center;
-            justify-content: center; border-radius: 5px; flex-shrink: 0;
-        }
-        .article-toggle:hover { background: var(--hover-bg); color: var(--text); }
-        .article-toggle .chevron { font-size: 12px; transition: transform 0.2s ease; }
-        .article-toggle[aria-expanded="true"] .chevron { transform: rotate(90deg); }
-        
-        .sidebar-children {
-            display: none; margin-left: 18px;
-            border-left: 1px solid var(--border); padding-left: 8px;
-        }
-        .sidebar-children.open { display: block; }
-        
-        .sidebar-article[data-level="2"] { margin-left: 0; }
-        .sidebar-article[data-level="3"] { margin-left: 4px; }
-        .sidebar-article[data-level="4"] { margin-left: 4px; }
-        .sidebar-article[data-level="5"] { margin-left: 4px; }
-        .sidebar-article[data-level="6"] { margin-left: 4px; }
-    </style>
+    @if($isExport)
+        <style>
+            {!! file_get_contents(public_path('css/kb-viewer.css')) !!}
+        </style>
+    @else
+        <link rel="stylesheet" href="{{ asset('css/kb-viewer.css') }}">
+    @endif
 </head>
 
 <body>
@@ -332,13 +43,16 @@
             <!-- Articles -->
             @foreach($project->articles as $article)
                 <div id="article-{{ $article->id }}" class="article-section">
+                    <div class="breadcrumb" id="breadcrumb-{{ $article->id }}"></div>
                     <div class="article-meta">{{ $article->type ?? 'Dokumentasi' }}</div>
                     <h1 class="page-title">{{ $article->title }}</h1>
+                    <div id="toc-{{ $article->id }}"></div>
                     <div class="ql-snow">
                         <div class="ql-editor">
                             {!! $article->content !!}
                         </div>
                     </div>
+                    <div class="article-nav" id="nav-{{ $article->id }}"></div>
                 </div>
             @endforeach
 
@@ -417,6 +131,160 @@
                 });
             });
         });
+
+        // ==========================================
+        // BREADCRUMB BUILDER & SEARCH ENGINE
+        // ==========================================
+        function buildBreadcrumb(id) {
+            let crumbs = [];
+
+            if (id === 'home') {
+                crumbs.push({ text: 'Home', href: '#article-home' });
+                crumbs.push({ text: `{{ $project->name }}`, href: '#article-home' });
+                return crumbs;
+            }
+
+            let nav = document.querySelector('a[href="#article-' + id + '"]');
+            if (!nav) return [];
+
+            crumbs.unshift({ text: nav.textContent.trim(), href: '#article-' + id });
+
+            let parentDetails = nav.closest('.sidebar-children');
+            while (parentDetails) {
+                let parentToggle = document.querySelector('.article-toggle[data-target="' + parentDetails.id + '"]');
+                if (parentToggle && parentToggle.nextElementSibling) {
+                    let parentLink = parentToggle.nextElementSibling;
+                    crumbs.unshift({ text: parentLink.textContent.trim(), href: parentLink.getAttribute('href') });
+                }
+                parentDetails = parentDetails.parentElement.closest('.sidebar-children');
+            }
+
+            let categoryBlock = nav.closest('.category-block');
+            if (categoryBlock) {
+                let catTitle = categoryBlock.querySelector('.category-title').textContent.trim();
+                let firstLink = categoryBlock.querySelector('.nav-link');
+                let catHref = firstLink ? firstLink.getAttribute('href') : null;
+                crumbs.unshift({ text: catTitle, href: catHref });
+            }
+
+            crumbs.unshift({ text: `{{ $project->name }}`, href: '#article-home' });
+            crumbs.unshift({ text: 'Home', href: '#article-home' });
+
+            return crumbs;
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        let allDocs = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Indexing for search
+            document.querySelectorAll('.article-section:not(#article-home)').forEach(section => {
+                let sid = section.id.replace('article-', '');
+                let stitle = section.querySelector('.page-title').textContent.trim();
+                let stxt = section.querySelector('.ql-editor').textContent.trim();
+                allDocs.push({ id: sid, title: stitle, txt: stxt });
+            });
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            let q = e.target.value.toLowerCase().trim();
+            if (!q) {
+                searchResults.style.display = 'none';
+                return;
+            }
+            // Search title and text
+            let matches = allDocs.filter(d =>
+                d.title.toLowerCase().includes(q) || d.txt.toLowerCase().includes(q)
+            ).slice(0, 10);
+
+            if (matches.length > 0) {
+                searchResults.innerHTML = matches.map(m => {
+                    let pathObj = buildBreadcrumb(m.id);
+                    let path = pathObj.map(c => c.text).join(' / ');
+                    return `<a href="#article-${m.id}" class="search-result-item" onclick="searchResults.style.display='none'; searchInput.value=''; window.location.hash='#article-${m.id}'; showArticle('${m.id}'); return false;">
+                        <div class="search-result-title">${m.title}</div>
+                        <div class="search-result-excerpt">${path}</div>
+                    </a>`;
+                }).join('');
+                searchResults.style.display = 'block';
+            } else {
+                searchResults.innerHTML = `<div style="padding:15px; font-size:0.85rem; color:gray;">Tidak ditemukan hasil untuk "${e.target.value}".</div>`;
+                searchResults.style.display = 'block';
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        // Ensure breadcrumb is attached when displaying article
+        const originalShowArticle = showArticle;
+        showArticle = function (id) {
+            originalShowArticle(id);
+            const breadcrumbEl = document.getElementById('breadcrumb-' + id);
+            if (breadcrumbEl) {
+                let crumbs = buildBreadcrumb(id);
+                breadcrumbEl.innerHTML = crumbs.map((c, i) => {
+                    if (i === crumbs.length - 1) {
+                        return `<span>${c.text}</span>`; // Active page not linked
+                    }
+                    if (c.href) {
+                        return `<a href="${c.href}" onclick="window.location.hash='${c.href}'; showArticle('${c.href.replace('#article-', '')}'); return false;" style="color:var(--text-light); text-decoration:none;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-light)'">${c.text}</a>`;
+                    }
+                    return c.text;
+                }).join(' <span style="color:#d4d4d8;">></span> ');
+            }
+
+            // Build Table of Contents
+            const tocEl = document.getElementById('toc-' + id);
+            const editorEl = document.querySelector('#article-' + id + ' .ql-editor');
+            if (tocEl && editorEl && tocEl.innerHTML === '') {
+                let headings = editorEl.querySelectorAll('h1, h2, h3');
+                if (headings.length > 1) {
+                    let tocHtml = '<div style="background:#fafafa; border:1px solid var(--border); border-radius:8px; padding:15px; margin-bottom:20px;">';
+                    tocHtml += '<div style="font-weight:600; font-size:0.9rem; margin-bottom:10px; color:var(--text-light);">Daftar Isi</div><ul style="list-style:none; margin:0; padding:0;">';
+
+                    headings.forEach((h, i) => {
+                        let text = h.textContent.trim();
+                        let tag = h.tagName.toLowerCase();
+                        let ml = tag === 'h1' ? 0 : (tag === 'h2' ? 15 : 30);
+                        let hid = 'heading-' + id + '-' + i;
+                        h.id = hid;
+                        tocHtml += `<li style="margin-left:${ml}px; margin-bottom:8px;"><a href="#${hid}" style="color:var(--text); text-decoration:none; font-size:0.95rem;">${text}</a></li>`;
+                    });
+                    tocHtml += '</ul></div>';
+                    tocEl.innerHTML = tocHtml;
+                }
+            }
+
+            // Build Next/Prev Navigation
+            const navEl = document.getElementById('nav-' + id);
+            if (navEl && navEl.innerHTML === '') {
+                let links = Array.from(document.querySelectorAll('.sidebar .nav-link')).filter(a => a.getAttribute('href').startsWith('#article-') && a.getAttribute('href') !== '#article-home');
+                let currentIndex = links.findIndex(a => a.getAttribute('href') === '#article-' + id);
+                if (currentIndex !== -1) {
+                    let navHtml = '<div style="display:flex; justify-content:space-between; margin-top:50px; border-top:1px solid var(--border); padding-top:20px;">';
+
+                    if (currentIndex > 0) {
+                        let prev = links[currentIndex - 1];
+                        navHtml += `<a href="${prev.getAttribute('href')}" onclick="window.location.hash='${prev.getAttribute('href')}'; showArticle('${prev.getAttribute('href').replace('#article-', '')}'); return false;" style="text-decoration:none; color:var(--text); max-width:45%;"><div style="font-size:0.8rem; color:var(--text-light);">← Sebelumnya</div><div style="font-weight:600; margin-top:5px;">${prev.textContent.trim()}</div></a>`;
+                    } else {
+                        navHtml += `<div></div>`;
+                    }
+
+                    if (currentIndex < links.length - 1) {
+                        let next = links[currentIndex + 1];
+                        navHtml += `<a href="${next.getAttribute('href')}" onclick="window.location.hash='${next.getAttribute('href')}'; showArticle('${next.getAttribute('href').replace('#article-', '')}'); return false;" style="text-decoration:none; color:var(--text); max-width:45%; text-align:right;"><div style="font-size:0.8rem; color:var(--text-light);">Selanjutnya →</div><div style="font-weight:600; margin-top:5px;">${next.textContent.trim()}</div></a>`;
+                    }
+
+                    navHtml += '</div>';
+                    navEl.innerHTML = navHtml;
+                }
+            }
+        };
     </script>
 </body>
 

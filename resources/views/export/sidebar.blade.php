@@ -2,6 +2,10 @@
     <div class="sidebar-header">
         <a href="#article-home" class="site-title nav-link">{{ $project->name }}</a>
     </div>
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari artikel..." autocomplete="off">
+        <div id="searchResults" class="search-results"></div>
+    </div>
     <div class="sidebar-content">
 
         @php

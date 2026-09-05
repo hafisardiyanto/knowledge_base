@@ -316,7 +316,7 @@ class KbController extends Controller
             $folderName = $project->slug;
 
             // Compile single-page SPA view
-            $indexHtml = view('export.index', compact('project'))->render();
+            $indexHtml = view('export.index', ['project' => $project, 'isExport' => true])->render();
 
             // Extract base64 images to physical files in the ZIP to save massive space
             $indexHtml = preg_replace_callback('/src=["\']data:image\/(.*?);base64,(.*?)["\']/is', function ($matches) use ($zip, $folderName) {
