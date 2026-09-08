@@ -18,7 +18,7 @@ services:
     container_name: kb_nginx
     restart: unless-stopped
     ports:
-      - "8098:80"  # Port Baru yang tidak bentrok!
+      - "8098:80"
     volumes:
       - ./:/var/www
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
@@ -32,12 +32,12 @@ services:
     container_name: kb_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE:-knowledge_base}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-root}
-      MYSQL_USER: ${DB_USERNAME:-user}
+      MYSQL_DATABASE: knowledge_base_generator
+      MYSQL_ROOT_PASSWORD: password_root_rahasia
+      MYSQL_USER: user_laravel
+      MYSQL_PASSWORD: password_laravel
     ports:
-      - "3313:3306" # Port MySQL Baru yang tidak bentrok!
+      - "3313:3306"
     volumes:
       - kb_dbdata:/var/lib/mysql
     networks:
@@ -50,9 +50,9 @@ services:
     environment:
       PMA_HOST: db
       PMA_USER: root
-      PMA_PASSWORD: ${DB_PASSWORD:-root}
+      PMA_PASSWORD: password_root_rahasia
     ports:
-      - "8099:80" # Port PMA Baru yang tidak bentrok!
+      - "8099:80"
     depends_on:
       - db
     networks:
@@ -64,3 +64,4 @@ networks:
 
 volumes:
   kb_dbdata:
+
