@@ -162,6 +162,8 @@ class KbController extends Controller
             |--------------------------------------------------------------------------
             */
 
+            $defaultType = \App\Models\Setting::where('key', 'default_article_type')->value('value') ?? 'Dokumentasi';
+
             foreach ($tree as $categoryData) {
 
                 $categoryName = trim(
@@ -197,7 +199,8 @@ class KbController extends Controller
                         category: $category,
                         articleData: $articleData,
                         parentId: null,
-                        orderPosition: $orderArticle++
+                        orderPosition: $orderArticle++,
+                        defaultType: $defaultType
                     );
                 }
             }
@@ -228,7 +231,8 @@ class KbController extends Controller
         Category $category,
         array $articleData,
         $parentId = null,
-        $orderPosition = 1
+        $orderPosition = 1,
+        $defaultType = 'Dokumentasi'
     ) {
         $title = trim(
             $articleData['title'] ?? ''
@@ -269,7 +273,7 @@ class KbController extends Controller
             ),
 
             'content' => $articleData['content'] ?? '',
-            'type' => 'Dokumentasi',
+            'type' => $defaultType,
             'status' => 'Draft',
             'order_position' => $orderPosition
         ]);
@@ -293,7 +297,8 @@ class KbController extends Controller
                 category: $category,
                 articleData: $childArticle,
                 parentId: $article->id,
-                orderPosition: $childOrder++
+                orderPosition: $childOrder++,
+                defaultType: $defaultType
             );
         }
 
@@ -356,6 +361,18 @@ class KbController extends Controller
         }
 
         return back()->with('error', 'Gagal membuat file ZIP');
+    }
+
+    public function preview(Project $project)
+    {
+        $project->load([
+            'articles' => function ($q) {
+                $q->orderBy('order_position', 'asc');
+            },
+            'categories'
+        ]);
+
+        return view('export.index', compact('project'));
     }
 
     public function showOnlineKb(Request $request, $slug)

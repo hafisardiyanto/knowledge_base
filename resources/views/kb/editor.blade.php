@@ -110,7 +110,7 @@
                         displaySize: true
                     },
                     toolbar: [
-                        [{ 'header': [1, 2, 3, false] }],
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                         ['bold', 'italic', 'underline', 'strike'],
                         [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                         ['blockquote', 'code-block'],
@@ -1000,7 +1000,7 @@
                     let previewBtn = document.getElementById('btn-preview');
                     if (previewBtn) {
                         previewBtn.style.display = 'inline-block';
-                        previewBtn.href = `/docs/{{ $project->slug }}#article-${article.id}`;
+                        previewBtn.href = `{{ route('kb.preview', $project->id) }}#article-${article.id}`;
                     }
                 }, 50);
             }
@@ -1033,6 +1033,14 @@
                     alert('Gagal menyimpan KB');
                 }
             }
+            // Auto-load article from URL parameter if present
+            window.addEventListener('DOMContentLoaded', (event) => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const articleIdParam = urlParams.get('article_id');
+                if (articleIdParam && articles[articleIdParam]) {
+                    loadArticle(articleIdParam);
+                }
+            });
         </script>
     @endpush
 @endsection

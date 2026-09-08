@@ -58,14 +58,14 @@
                             <div class="kb-article-meta">
                                 <span><strong>Project:</strong> {{ $article->project->name }}</span>
                                 <span><strong>Category:</strong>
-                                    {{ $article->category ? $article->category->name : 'Uncategorized' }}</span>
+                                    {{ $article->category ? $article->category->name : 'Tanpa Kategori' }}</span>
                                 <span><strong>Type:</strong> {{ $article->type }}</span>
                             </div>
                         </div>
                         <div style="display: flex; gap: 10px;">
-                            <a href="#" class="btn-primary"
+                            <a href="{{ route('kb.editor', ['project' => $article->project_id, 'article_id' => $article->id]) }}"
+                                class="btn-primary"
                                 style="background: white; border: 1px solid #d1d5db; color: #374151;">Lihat</a>
-                            <a href="{{ route('kb.editor', $article->project_id) }}" class="btn-primary">Edit</a>
                         </div>
                     </div>
                 </div>

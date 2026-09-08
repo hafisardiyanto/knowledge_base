@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/kb/project/{project}/publish-all', [KbController::class, 'publishAll'])->name('kb.publish-all');
     Route::post('/kb/article/{article}/toggle-publish', [KbController::class, 'togglePublish'])->name('kb.toggle-publish');
     Route::post('knowledge-base/{project}/generate', [KbController::class, 'generateHtml'])->name('kb.generate');
+    Route::get('knowledge-base/{project}/preview', [KbController::class, 'preview'])->name('kb.preview');
 
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
