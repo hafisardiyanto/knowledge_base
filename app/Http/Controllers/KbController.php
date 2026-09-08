@@ -347,6 +347,16 @@ class KbController extends Controller
 
             $zip->close();
 
+            // Cek batasan ukuran ZIP
+            $maxUploadSizeMB = \App\Models\Setting::where('key', 'max_upload_size')->value('value') ?? 5;
+            $maxSizeBytes = $maxUploadSizeMB * 1024 * 1024;
+            $actualSizeBytes = filesize($zipFile);
+
+            if ($actualSizeBytes > $maxSizeBytes) {
+                unlink($zipFile);
+                return back()->with('error', 'Gagal memproses! Total ukuran file ZIP (' . number_format($actualSizeBytes / 1048576, 2) . ' MB) melebihi batas ' . $maxUploadSizeMB . ' MB di Settings.');
+            }
+
             // Save history
             \App\Models\GenerateHistory::create([
                 'project_id' => $project->id,
@@ -357,7 +367,7 @@ class KbController extends Controller
             return response()->download($zipFile, $project->slug . '-KB.zip', [
                 'Content-Type' => 'application/zip',
                 'Content-Disposition' => 'attachment; filename="' . $project->slug . '-KB.zip"'
-            ])->deleteFileAfterSend(true);
+            ]);
         }
 
         return back()->with('error', 'Gagal membuat file ZIP');

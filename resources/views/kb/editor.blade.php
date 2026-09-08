@@ -31,6 +31,13 @@
         </div>
     </div>
 
+    @if(session('error'))
+        <div
+            style="padding: 15px; margin-bottom: 20px; border-radius: 6px; background-color: #fee2e2; color: #b91c1c; border: 1px solid #f87171;">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="editor-layout">
         <div class="sidebar-categories">
             <div class="cat-header">
@@ -92,6 +99,8 @@
         <script>
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const projectId = {{ $project->id }};
+            const maxUploadSizeMB = {{ \App\Models\Setting::where('key', 'max_upload_size')->value('value') ?? 5 }};
+            const maxUploadSizeBytes = maxUploadSizeMB * 1024 * 1024;
             const routes = {
                 saveCategory: "{{ route('kb.category.save', $project->id) }}",
                 saveArticleInfo: "{{ route('kb.article.saveInfo', $project->id) }}",
@@ -158,6 +167,12 @@
                     const file = event.target.files[0];
 
                     if (!file) {
+                        return;
+                    }
+
+                    if (file.size > maxUploadSizeBytes) {
+                        alert('Ukuran file Microsoft Word melebihi batas maksimal (' + maxUploadSizeMB + ' MB). Silahkan atur di menu Settings.');
+                        event.target.value = '';
                         return;
                     }
 
