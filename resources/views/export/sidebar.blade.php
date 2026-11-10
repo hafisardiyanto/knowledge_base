@@ -61,5 +61,17 @@
             @endif
         @endforeach
 
+        @php
+            $uncategorizedRoots = $project->articles->whereNull('category_id')->whereNull('parent_id')->sortBy('order_position');
+        @endphp
+        @if($uncategorizedRoots->isNotEmpty())
+            <div class="category-block">
+                <div class="category-title">Umum</div>
+                @php
+                    renderArticleTree($uncategorizedRoots, $project->articles);
+                @endphp
+            </div>
+        @endif
+
     </div>
 </nav>

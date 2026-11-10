@@ -68,7 +68,12 @@
                 <div class="project-actions">
                     <a href="{{ route('projects.show', $p->id) }}" class="action-btn">Detail</a>
                     <a href="{{ route('projects.edit', $p->id) }}" class="action-btn">Edit</a>
-                    <!-- Optional hapus btn included implicitly -->
+                    <button type="button" 
+                        class="action-btn btn-link" 
+                        onclick="openShareLinkModal('{{ route('kb.online', $p->slug) }}', 'Link KB: {{ addslashes($p->name) }}', 'Bagikan tautan Knowledge Base online untuk project {{ addslashes($p->name) }}.')" 
+                        title="Buka & Salin Link Online KB">
+                        🔗 Link KB
+                    </button>
                     <a href="{{ route('kb.editor', $p->id) }}" class="action-btn primary">Kelola KB</a>
                 </div>
             </div>

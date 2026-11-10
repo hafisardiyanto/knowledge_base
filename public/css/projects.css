@@ -114,3 +114,191 @@
     display: flex;
     gap: 10px;
 }
+
+/* ============================================================
+   PROJECT CARD ACTIONS & BUTTONS
+   ============================================================ */
+.project-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f3f4f6;
+    flex-wrap: wrap;
+}
+
+.actions-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 7px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #4b5563;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    line-height: 1.2;
+    white-space: nowrap;
+    font-family: inherit;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.btn-action:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    color: #111827;
+}
+
+.btn-action.btn-link-action {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #15803d;
+}
+
+.btn-action.btn-link-action:hover {
+    background: #dcfce7;
+    border-color: #86efac;
+    color: #166534;
+}
+
+.btn-action.btn-danger-action {
+    color: #dc2626;
+    border-color: #fee2e2;
+    background: #fff;
+}
+
+.btn-action.btn-danger-action:hover {
+    background: #fef2f2;
+    border-color: #fca5a5;
+    color: #b91c1c;
+}
+
+.btn-manage {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease-in-out;
+    line-height: 1.2;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
+}
+
+.btn-manage:hover {
+    background: #1d4ed8;
+}
+
+/* Modal styles for projects */
+.project-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.project-modal-card {
+    background: white;
+    border-radius: 12px;
+    width: 480px;
+    max-width: 90%;
+    padding: 24px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.project-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.project-modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #111827;
+    font-weight: 600;
+}
+
+.project-modal-close {
+    cursor: pointer;
+    font-size: 1.4rem;
+    color: #9ca3af;
+    line-height: 1;
+}
+
+.project-modal-desc {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.project-modal-field {
+    margin-bottom: 16px;
+}
+
+.project-modal-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.project-modal-input,
+.project-modal-textarea,
+.project-modal-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    font-family: inherit;
+    background: white;
+}
+
+.project-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.project-modal-btn-cancel {
+    padding: 10px 18px;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #4b5563;
+    font-weight: 500;
+}

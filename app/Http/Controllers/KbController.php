@@ -13,7 +13,9 @@ class KbController extends Controller
 {
     public function index(Request $request)
     {
-        $projects = Project::orderBy('name')->get();
+        $projects = Project::with(['categories' => function ($q) {
+            $q->orderBy('order_position', 'asc');
+        }])->orderBy('name')->get();
         // Just load everything for filter dropdowns.
         $categories = Category::orderBy('name')->get();
 
@@ -42,16 +44,38 @@ class KbController extends Controller
 
     public function editor(Project $project)
     {
+        @ini_set('memory_limit', '512M');
+
         $project->load([
             'categories' => function ($q) {
                 $q->orderBy('order_position', 'asc');
             },
             'articles' => function ($q) {
-                $q->orderBy('order_position', 'asc');
+                $q->select(['id', 'project_id', 'category_id', 'parent_id', 'title', 'type', 'status', 'order_position'])
+                  ->orderBy('order_position', 'asc');
             }
         ]);
 
-        return view('kb.editor', compact('project'));
+        $allProjects = Project::with(['categories' => function ($q) {
+            $q->orderBy('order_position', 'asc');
+        }])->orderBy('name')->get();
+
+        return view('kb.editor', compact('project', 'allProjects'));
+    }
+
+    public function getArticleContent(Project $project, Article $article)
+    {
+        if ($article->project_id != $project->id) {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+
+        return response()->json([
+            'id' => $article->id,
+            'title' => $article->title,
+            'type' => $article->type,
+            'status' => $article->status,
+            'content' => $article->content ?? ''
+        ]);
     }
 
     public function saveCategory(Request $request, Project $project)
@@ -97,6 +121,68 @@ class KbController extends Controller
     {
         $article->delete();
         return response()->json(['success' => true]);
+    }
+
+    public function duplicateArticle(Request $request, Project $project, Article $article)
+    {
+        $targetProjectId = $request->input('target_project_id', $project->id);
+        $targetCategoryId = $request->input('target_category_id', $article->category_id);
+        $targetParentId = $request->input('target_parent_id', $article->parent_id);
+
+        // If target project is different and category is not belonging to target project, adjust category
+        if ($targetProjectId != $project->id && $targetCategoryId) {
+            $catExists = Category::where('id', $targetCategoryId)->where('project_id', $targetProjectId)->exists();
+            if (!$catExists) {
+                $targetCategoryId = null;
+            }
+        }
+
+        DB::beginTransaction();
+        try {
+            $newArticle = $this->recursivelyDuplicateArticle($article, $targetProjectId, $targetCategoryId, $targetParentId);
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Artikel berhasil diduplikat.',
+                'article' => $newArticle,
+                'target_project_id' => $targetProjectId
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menduplikat artikel: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    private function recursivelyDuplicateArticle(Article $sourceArticle, $projectId, $categoryId, $parentId = null, $isRoot = true)
+    {
+        $title = $isRoot ? ($sourceArticle->title . ' (Copy)') : $sourceArticle->title;
+        $maxOrder = Article::where('category_id', $categoryId)
+            ->where('parent_id', $parentId)
+            ->max('order_position') ?? 0;
+
+        $newArticle = Article::create([
+            'project_id' => $projectId,
+            'category_id' => $categoryId,
+            'parent_id' => $parentId,
+            'title' => $title,
+            'slug' => Str::slug($title . '-' . uniqid()),
+            'type' => $sourceArticle->type,
+            'status' => 'Draft',
+            'content' => $sourceArticle->content,
+            'order_position' => $maxOrder + 1
+        ]);
+
+        // Duplicate children recursively
+        $children = Article::where('parent_id', $sourceArticle->id)->orderBy('order_position', 'asc')->get();
+        foreach ($children as $child) {
+            $this->recursivelyDuplicateArticle($child, $projectId, $categoryId, $newArticle->id, false);
+        }
+
+        return $newArticle;
     }
 
     public function save(Request $request, Project $project)
@@ -365,6 +451,8 @@ class KbController extends Controller
 
     public function preview(Project $project)
     {
+        @ini_set('memory_limit', '512M');
+
         $project->load([
             'articles' => function ($q) {
                 $q->orderBy('order_position', 'asc');
@@ -377,6 +465,8 @@ class KbController extends Controller
 
     public function showOnlineKb(Request $request, $slug)
     {
+        @ini_set('memory_limit', '512M');
+
         $project = Project::where('slug', $slug)->firstOrFail();
 
         // Prevent access if there are no published articles at all

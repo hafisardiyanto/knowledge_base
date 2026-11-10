@@ -30,13 +30,16 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('projects', ProjectController::class);
+    Route::post('projects/{project}/duplicate', [ProjectController::class, 'duplicate'])->name('projects.duplicate');
 
     Route::get('knowledge-base', [KbController::class, 'index'])->name('kb.index');
     Route::get('knowledge-base/{project}/editor', [KbController::class, 'editor'])->name('kb.editor');
+    Route::get('knowledge-base/{project}/article/{article}', [KbController::class, 'getArticleContent'])->name('kb.article.content');
     Route::post('knowledge-base/{project}/save-category', [KbController::class, 'saveCategory'])->name('kb.category.save');
     Route::delete('knowledge-base/{project}/delete-category/{category}', [KbController::class, 'deleteCategory'])->name('kb.category.delete');
 
     Route::post('knowledge-base/{project}/save-article-info', [KbController::class, 'saveArticleInfo'])->name('kb.article.saveInfo');
+    Route::post('knowledge-base/{project}/duplicate-article/{article}', [KbController::class, 'duplicateArticle'])->name('kb.article.duplicate');
     Route::delete('knowledge-base/{project}/delete-article/{article}', [KbController::class, 'deleteArticle'])->name('kb.article.delete');
 
     Route::post('knowledge-base/{project}/save', [KbController::class, 'save'])->name('kb.save');

@@ -60,6 +60,98 @@
         </main>
     </div>
 
+    <!-- Global Share Link Modal -->
+    <div id="global-share-link-modal" class="link-modal-overlay">
+        <div class="link-modal-card">
+            <div class="link-modal-header">
+                <h3 id="link-modal-title">🔗 Link Knowledge Base</h3>
+                <button type="button" class="link-modal-close" onclick="closeShareLinkModal()">&times;</button>
+            </div>
+            <p id="link-modal-description" class="link-modal-desc">
+                Salin link di bawah ini untuk membagikan atau membuka Knowledge Base secara online.
+            </p>
+            <div class="link-modal-input-group">
+                <input type="text" id="link-modal-url-input" class="link-modal-input" readonly>
+                <button type="button" id="link-modal-btn-copy" class="link-modal-btn-copy" onclick="copyShareModalLink()">
+                    📋 Salin Link
+                </button>
+            </div>
+            <div class="link-modal-footer">
+                <a href="#" id="link-modal-open-tab" target="_blank" class="link-modal-open-btn">
+                    🌍 Buka di Tab Baru ↗
+                </a>
+                <button type="button" class="link-modal-btn-done" onclick="closeShareLinkModal()">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openShareLinkModal(url, title, desc) {
+            const modal = document.getElementById('global-share-link-modal');
+            const input = document.getElementById('link-modal-url-input');
+            const titleEl = document.getElementById('link-modal-title');
+            const descEl = document.getElementById('link-modal-description');
+            const openLink = document.getElementById('link-modal-open-tab');
+            const copyBtn = document.getElementById('link-modal-btn-copy');
+
+            input.value = url;
+            openLink.href = url;
+            if (title) titleEl.textContent = '🔗 ' + title;
+            if (desc) descEl.textContent = desc;
+
+            copyBtn.innerHTML = '📋 Salin Link';
+            copyBtn.style.backgroundColor = '#2563eb';
+
+            modal.style.display = 'flex';
+            setTimeout(() => input.select(), 50);
+        }
+
+        function closeShareLinkModal() {
+            const modal = document.getElementById('global-share-link-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function copyShareModalLink() {
+            const input = document.getElementById('link-modal-url-input');
+            const copyBtn = document.getElementById('link-modal-btn-copy');
+
+            input.select();
+            input.setSelectionRange(0, 99999);
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(input.value).then(onCopySuccess).catch(() => {
+                    document.execCommand('copy');
+                    onCopySuccess();
+                });
+            } else {
+                document.execCommand('copy');
+                onCopySuccess();
+            }
+
+            function onCopySuccess() {
+                copyBtn.innerHTML = '✅ Tersalin!';
+                copyBtn.style.backgroundColor = '#16a34a';
+                setTimeout(() => {
+                    copyBtn.innerHTML = '📋 Salin Link';
+                    copyBtn.style.backgroundColor = '#2563eb';
+                }, 2000);
+            }
+        }
+
+        // Close on escape key or clicking backdrop
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeShareLinkModal();
+        });
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('global-share-link-modal');
+            if (modal && e.target === modal) {
+                closeShareLinkModal();
+            }
+        });
+    </script>
+
     @stack('scripts')
 </body>
 
