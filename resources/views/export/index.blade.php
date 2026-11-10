@@ -22,6 +22,18 @@
 </head>
 
 <body>
+    <!-- Mobile Header Bar -->
+    <div class="mobile-header-bar">
+        <button type="button" class="mobile-menu-btn" onclick="toggleMobileSidebar()" title="Buka Menu">
+            ☰
+        </button>
+        <a href="#article-home" class="mobile-site-title">{{ $project->name }}</a>
+        <span style="width: 32px;"></span>
+    </div>
+
+    <!-- Mobile Backdrop -->
+    <div class="mobile-sidebar-backdrop" id="mobileBackdrop" onclick="toggleMobileSidebar()"></div>
+
     @include('export.sidebar')
 
     <div class="main-content">
@@ -60,7 +72,22 @@
     </div>
 
     <script>
+        function toggleMobileSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const backdrop = document.getElementById('mobileBackdrop');
+            if (sidebar) sidebar.classList.toggle('mobile-open');
+            if (backdrop) backdrop.classList.toggle('active');
+        }
+
         function showArticle(id) {
+            // Auto close mobile drawer if open
+            if (window.innerWidth <= 768) {
+                const sidebar = document.querySelector('.sidebar');
+                const backdrop = document.getElementById('mobileBackdrop');
+                if (sidebar) sidebar.classList.remove('mobile-open');
+                if (backdrop) backdrop.classList.remove('active');
+            }
+
             // Hide all articles
             document.querySelectorAll('.article-section').forEach(el => el.classList.remove('active'));
             // Remove active state from nav

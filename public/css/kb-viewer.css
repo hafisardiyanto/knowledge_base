@@ -502,3 +502,119 @@ details.sidebar-details[open]>summary {
 .ql-font-lobster { font-family: 'Lobster', cursive !important; }
 .ql-font-comfortaa { font-family: 'Comfortaa', cursive !important; }
 .ql-font-comic-neue { font-family: 'Comic Neue', cursive !important; }
+
+/* ============================================================
+   RESPONSIVE DESIGN (MOBILE / TABLET SUPPORT)
+   ============================================================ */
+.mobile-header-bar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: var(--sidebar-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+}
+
+.mobile-menu-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.mobile-site-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.mobile-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 998;
+}
+
+@media (max-width: 768px) {
+    .mobile-header-bar {
+        display: flex;
+    }
+
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 280px;
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease-in-out;
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+    .mobile-sidebar-backdrop.active {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        padding: 70px 16px 30px 16px !important;
+        width: 100%;
+        min-height: 100vh;
+    }
+
+    .content-wrapper {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .page-title {
+        font-size: 1.6rem !important;
+    }
+
+    .page-desc {
+        font-size: 0.95rem !important;
+    }
+
+    .search-container {
+        padding: 12px 16px !important;
+    }
+
+    .ql-editor table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+

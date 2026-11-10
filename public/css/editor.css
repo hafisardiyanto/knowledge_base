@@ -552,3 +552,62 @@ button.ql-redo::after {
 .ql-font-lobster { font-family: 'Lobster', cursive !important; }
 .ql-font-comfortaa { font-family: 'Comfortaa', cursive !important; }
 .ql-font-comic-neue { font-family: 'Comic Neue', cursive !important; }
+
+/* ========================================================
+   RESPONSIVE DESIGN (MOBILE / TABLET < 768px)
+   ======================================================== */
+@media (max-width: 768px) {
+    .editor-layout {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        gap: 16px;
+    }
+
+    .sidebar-categories {
+        width: 100%;
+        max-height: 280px;
+        order: 1;
+    }
+
+    .editor-main {
+        width: 100%;
+        order: 2;
+        min-height: 600px;
+    }
+
+    .editor-topbar {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .editor-topbar-actions {
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .editor-topbar-actions button,
+    .editor-topbar-actions a {
+        flex: 1 1 calc(50% - 8px);
+        justify-content: center;
+        text-align: center;
+    }
+
+    .editor-header-inputs {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .editor-header-inputs input,
+    .editor-header-inputs select {
+        width: 100%;
+    }
+
+    #custom-toolbar {
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+

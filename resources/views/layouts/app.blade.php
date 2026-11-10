@@ -49,6 +49,11 @@
 
     <div class="main-wrapper">
         <header class="topbar">
+            <!-- Mobile sidebar toggle button -->
+            <button type="button" class="admin-mobile-toggle" onclick="toggleAdminSidebar()" title="Buka Menu">
+                ☰
+            </button>
+
             <!-- Space for user profile / breadcrumbs if needed -->
             <div style="font-weight: 500; color: #4b5563;">
                 Administrator
@@ -59,6 +64,9 @@
             @yield('content')
         </main>
     </div>
+
+    <!-- Admin Mobile Backdrop -->
+    <div id="adminMobileBackdrop" class="admin-sidebar-backdrop" onclick="toggleAdminSidebar()"></div>
 
     <!-- Global Share Link Modal -->
     <div id="global-share-link-modal" class="link-modal-overlay">
@@ -88,6 +96,13 @@
     </div>
 
     <script>
+        function toggleAdminSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const backdrop = document.getElementById('adminMobileBackdrop');
+            if (sidebar) sidebar.classList.toggle('mobile-open');
+            if (backdrop) backdrop.classList.toggle('active');
+        }
+
         function openShareLinkModal(url, title, desc) {
             const modal = document.getElementById('global-share-link-modal');
             const input = document.getElementById('link-modal-url-input');
