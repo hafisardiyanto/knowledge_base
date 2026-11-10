@@ -6,7 +6,7 @@
 @endpush
 
 @section('content')
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+    <div class="projects-page-topbar">
         <div>
             <p style="color: #6b7280; font-size: 0.95rem; margin-bottom: 20px;">Kelola seluruh project dan buat Knowledge
                 Base dari satu tempat.</p>
@@ -14,16 +14,16 @@
             <p style="color: #6b7280; font-size: 0.95rem;">Daftar project yang sudah dibuat.</p>
         </div>
 
-        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 20px;">
+        <div class="projects-page-controls">
             <a href="{{ route('projects.create') }}" class="btn-primary"
                 style="background: #eff6ff; color: #1d4ed8; border: none; font-weight: 600; padding: 10px 20px; box-shadow: none;">+
                 Project Baru</a>
 
-            <form method="GET" action="{{ route('projects.index') }}" style="display: flex; gap: 10px;">
+            <form method="GET" action="{{ route('projects.index') }}" class="projects-filter-form">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari project..."
-                    style="padding: 10px 15px; border: 1px solid #d1d5db; border-radius: 8px; width: 250px; outline: none; font-size: 0.9rem;">
+                    class="projects-search-input">
                 <select name="status"
-                    style="padding: 10px 15px; border: 1px solid #d1d5db; border-radius: 8px; background: white; outline: none; font-size: 0.9rem;"
+                    class="projects-select-input"
                     onchange="this.form.submit()">
                     <option value="">Semua Status</option>
                     <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>

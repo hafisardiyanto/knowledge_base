@@ -5,12 +5,12 @@
 @endpush
 
 @section('content')
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div class="kb-page-topbar">
         <div>
             <h2>📖 Knowledge Base</h2>
             <p style="color: #6b7280; font-size: 0.95rem;">Lihat seluruh KB dari semua project.</p>
         </div>
-        <a href="{{ route('projects.index') }}" class="btn-primary">+ Buat KB Baru (Pilih Project)</a>
+        <a href="{{ route('projects.index') }}" class="btn-primary kb-btn-create-link">+ Buat KB Baru (Pilih Project)</a>
     </div>
 
     <div class="card">
@@ -18,8 +18,7 @@
             <input type="text" name="search" value="{{ request('search') }}" placeholder="🔍 Cari Knowledge Base (Title)"
                 class="kb-search-input">
 
-            <select name="project_id"
-                style="padding: 10px 15px; border: 1px solid #d1d5db; border-radius: 6px; background: white; outline: none;">
+            <select name="project_id" class="kb-filter-select">
                 <option value="">Semua Project ▼</option>
                 @foreach($projects as $proj)
                     <option value="{{ $proj->id }}" {{ request('project_id') == $proj->id ? 'selected' : '' }}>{{ $proj->name }}
@@ -27,8 +26,7 @@
                 @endforeach
             </select>
 
-            <select name="category_id"
-                style="padding: 10px 15px; border: 1px solid #d1d5db; border-radius: 6px; background: white; outline: none;">
+            <select name="category_id" class="kb-filter-select">
                 <option value="">Semua Category ▼</option>
                 @foreach($categories as $cat)
                     <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}
@@ -36,8 +34,7 @@
                 @endforeach
             </select>
 
-            <select name="type"
-                style="padding: 10px 15px; border: 1px solid #d1d5db; border-radius: 6px; background: white; outline: none;">
+            <select name="type" class="kb-filter-select">
                 <option value="">Semua Type ▼</option>
                 <option value="Dokumentasi" {{ request('type') == 'Dokumentasi' ? 'selected' : '' }}>📄 Dokumentasi</option>
                 <option value="Tutorial" {{ request('type') == 'Tutorial' ? 'selected' : '' }}>📖 Tutorial</option>
@@ -46,7 +43,7 @@
                     Troubleshooting</option>
             </select>
 
-            <button type="submit" class="btn-primary" style="padding: 10px 20px;">Filter</button>
+            <button type="submit" class="btn-primary kb-filter-btn">Filter</button>
         </form>
 
         <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -62,7 +59,7 @@
                                 <span><strong>Type:</strong> {{ $article->type }}</span>
                             </div>
                         </div>
-                        <div style="display: flex; gap: 10px;">
+                        <div class="kb-article-actions">
                             <button type="button" 
                                 onclick="openShareLinkModal('{{ route('kb.online', $article->project->slug) }}#article-{{ $article->id }}', 'Link Artikel: {{ addslashes($article->title) }}', 'Bagikan tautan langsung ke artikel &quot;{{ addslashes($article->title) }}&quot; (Project: {{ addslashes($article->project->name) }}).')"
                                 class="btn-primary" 

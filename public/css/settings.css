@@ -41,3 +41,19 @@
     margin-top: 30px;
     text-align: right;
 }
+
+@media (max-width: 768px) {
+    .settings-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .settings-footer {
+        text-align: stretch;
+    }
+
+    .settings-footer button {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}

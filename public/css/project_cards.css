@@ -163,3 +163,44 @@
     background: #1d4ed8;
     border-color: #1d4ed8;
 }
+
+/* Responsive adjustments for project cards */
+@media (max-width: 768px) {
+    .project-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .project-card {
+        padding: 16px;
+    }
+
+    .project-card-header {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .project-title {
+        font-size: 1.15rem;
+    }
+
+    .project-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .action-btn {
+        flex: 1 1 calc(50% - 8px);
+        min-width: 110px;
+        text-align: center;
+        padding: 8px 10px;
+    }
+
+    .action-btn.primary {
+        margin-left: 0;
+        flex: 1 1 100%;
+    }
+}
+

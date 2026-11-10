@@ -28,7 +28,9 @@
             ☰
         </button>
         <a href="#article-home" class="mobile-site-title">{{ $project->name }}</a>
-        <span style="width: 32px;"></span>
+        <a href="{{ url()->previous() ?: route('projects.show', $project->id) }}" class="mobile-back-btn" title="Kembali ke Dashboard">
+            ↩
+        </a>
     </div>
 
     <!-- Mobile Backdrop -->

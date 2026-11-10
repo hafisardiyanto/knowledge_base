@@ -17,22 +17,34 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
     display: flex;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
 }
 
 /* Sidebar */
 .sidebar {
     width: 260px;
+    flex-shrink: 0;
     background-color: var(--sidebar-bg);
     color: var(--sidebar-text);
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-header {
@@ -97,9 +109,11 @@ body {
 /* Main Content */
 .main-wrapper {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .topbar {
@@ -110,12 +124,17 @@ body {
     align-items: center;
     justify-content: flex-end;
     padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
 }
 
 .main-content {
     flex: 1;
     padding: 30px;
-    overflow-y: auto;
+    overflow-y: visible;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Utilities */
@@ -125,6 +144,48 @@ body {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     padding: 24px;
     border: 1px solid var(--border-color);
+}
+
+/* Back Navigation Button */
+.btn-back-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-back-nav:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+    color: #111827;
+    transform: translateX(-2px);
+}
+
+.btn-back-nav .back-arrow {
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.btn-back-nav:hover .back-arrow {
+    transform: translateX(-3px);
+}
+
+.page-header-with-back {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
 }
 
 .btn-primary {
@@ -332,8 +393,8 @@ body {
 }
 
 @media (max-width: 768px) {
-    body {
-        overflow: auto;
+    html, body {
+        overflow-x: hidden;
     }
 
     .admin-mobile-toggle {
@@ -345,6 +406,7 @@ body {
         top: 0;
         left: 0;
         bottom: 0;
+        height: 100%;
         width: 270px;
         z-index: 999;
         transform: translateX(-100%);

@@ -6,7 +6,9 @@
 
 @section('content')
     <div style="margin-bottom: 20px;">
-        <a href="{{ route('projects.index') }}" class="back-link">← Kembali ke Daftar</a>
+        <a href="{{ route('projects.index') }}" class="btn-back-nav" title="Kembali ke Daftar Project">
+            <span class="back-arrow">←</span> Kembali ke Daftar Project
+        </a>
     </div>
 
     <div class="card" style="margin-bottom: 20px;">

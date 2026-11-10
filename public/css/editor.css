@@ -1,17 +1,57 @@
+.editor-topbar-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.editor-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.editor-header-left h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #111827;
+}
+
+.editor-topbar-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 .editor-layout {
     display: flex;
-    height: calc(100vh - 120px);
+    min-height: calc(100vh - 120px);
+    width: 100%;
+    min-width: 0;
     gap: 20px;
+    box-sizing: border-box;
 }
 
 .sidebar-categories {
     width: 300px;
+    flex-shrink: 0;
     background: white;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+}
+
+.editor-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .cat-header {
@@ -557,6 +597,38 @@ button.ql-redo::after {
    RESPONSIVE DESIGN (MOBILE / TABLET < 768px)
    ======================================================== */
 @media (max-width: 768px) {
+    .editor-topbar-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .editor-header-left {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .editor-header-left .btn-back-nav {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+
+    .editor-topbar-buttons {
+        width: 100%;
+    }
+
+    .editor-topbar-buttons button,
+    .editor-topbar-buttons a,
+    .editor-topbar-buttons form {
+        flex: 1 1 calc(50% - 6px);
+        margin: 0 !important;
+    }
+
+    .editor-topbar-buttons form button {
+        width: 100%;
+    }
+
     .editor-layout {
         flex-direction: column;
         height: auto;

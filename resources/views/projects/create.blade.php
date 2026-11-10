@@ -5,7 +5,10 @@
 @endpush
 
 @section('content')
-    <div class="page-header">
+    <div class="page-header-with-back">
+        <a href="{{ route('projects.index') }}" class="btn-back-nav" title="Kembali ke Daftar Project">
+            <span class="back-arrow">←</span> Kembali ke Project
+        </a>
         <h2>{{ isset($project) ? 'Edit Project' : 'Buat Project Baru' }}</h2>
     </div>
 

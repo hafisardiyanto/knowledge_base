@@ -47,6 +47,44 @@
     color: #1f2937;
 }
 
+.dashboard-projects-bar {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 15px;
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        padding: 20px;
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+    }
+
+    .dashboard-projects-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .dashboard-projects-bar .btn-primary {
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+
 .project-list-header {
     display: flex;
     justify-content: space-between;

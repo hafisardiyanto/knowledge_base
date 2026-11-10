@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+    <div class="dashboard-projects-bar">
         <div>
             <h2 style="font-size: 1.4rem; color: #111827; margin-bottom: 5px;">Semua Project</h2>
             <p style="color: #6b7280; font-size: 0.95rem;">Daftar project yang sudah dibuat.</p>

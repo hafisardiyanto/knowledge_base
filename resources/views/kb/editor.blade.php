@@ -10,11 +10,14 @@
 @endpush
 
 @section('content')
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <div>
+    <div class="editor-topbar-wrapper">
+        <div class="editor-header-left">
+            <a href="{{ route('projects.show', $project->id) }}" class="btn-back-nav" title="Kembali ke Detail Project">
+                <span class="back-arrow">←</span> Kembali ke Project
+            </a>
             <h2>📚 Kelola KB: {{ $project->name }}</h2>
         </div>
-        <div style="display: flex; gap: 10px;">
+        <div class="editor-topbar-buttons">
             <input type="file" id="doc-upload" accept=".docx,.doc,.pdf" style="display: none;">
 
             <button type="button" class="btn-primary" style="background-color: #3b82f6;" onclick="triggerImport()">
@@ -25,7 +28,7 @@
                 class="btn-primary"
                 style="background-color: #6366f1; text-decoration: none; display: flex; align-items: center;">🌍 Buka Online
                 KB</a>
-            <form action="{{ route('kb.generate', $project->id) }}" method="POST">
+            <form action="{{ route('kb.generate', $project->id) }}" method="POST" style="margin: 0;">
                 @csrf
                 <button type="submit" class="btn-primary" style="background-color: #10b981;">👁️ Generate & Download
                     ZIP</button>

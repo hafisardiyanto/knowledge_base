@@ -1,6 +1,11 @@
 <nav class="sidebar">
     <div class="sidebar-header">
-        <a href="#article-home" class="site-title nav-link">{{ $project->name }}</a>
+        <div class="sidebar-header-left">
+            <a href="#article-home" class="site-title nav-link">{{ $project->name }}</a>
+        </div>
+        <a href="{{ route('projects.show', $project->id) }}" class="sidebar-exit-btn" title="Keluar / Kembali ke Panel Admin">
+            ✕
+        </a>
     </div>
     <div class="search-container">
         <input type="text" id="searchInput" class="search-input" placeholder="🔍 Cari artikel..." autocomplete="off">
