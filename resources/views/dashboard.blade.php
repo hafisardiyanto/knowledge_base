@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/project_cards.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}?v={{ filemtime(public_path('css/dashboard.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/project_cards.css') }}?v={{ filemtime(public_path('css/project_cards.css')) }}">
 @endpush
 
 @section('content')

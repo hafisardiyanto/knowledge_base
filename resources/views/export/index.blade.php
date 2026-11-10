@@ -17,7 +17,7 @@
             {!! file_get_contents(public_path('css/kb-viewer.css')) !!}
         </style>
     @else
-        <link rel="stylesheet" href="{{ asset('css/kb-viewer.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/kb-viewer.css') }}?v={{ filemtime(public_path('css/kb-viewer.css')) }}">
     @endif
 </head>
 
