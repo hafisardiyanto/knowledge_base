@@ -79,6 +79,160 @@
 }
 
 /* Detail View */
+.project-detail-back-bar {
+    margin-bottom: 20px;
+}
+
+.project-detail-card {
+    margin-bottom: 20px;
+    padding: 24px;
+}
+
+.project-header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.project-brand-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    min-width: 250px;
+}
+
+.project-icon-img {
+    width: 75px;
+    height: 75px;
+    border-radius: 12px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.project-icon-large {
+    font-size: 3.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.project-meta-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.project-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 6px;
+    word-break: break-word;
+}
+
+.project-desc {
+    color: #6b7280;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    word-break: break-word;
+}
+
+.project-status-badge {
+    display: inline-block;
+    background: #f3f4f6;
+    color: #374151;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.detail-delete-form {
+    margin: 0;
+    display: inline-block;
+}
+
+.btn-action-green {
+    background-color: #10b981;
+}
+
+.btn-action-green:hover {
+    background-color: #059669;
+}
+
+.btn-action-purple {
+    background-color: #8b5cf6;
+}
+
+.btn-action-purple:hover {
+    background-color: #7c3aed;
+}
+
+.btn-action-indigo {
+    background-color: #4f46e5;
+}
+
+.btn-action-indigo:hover {
+    background-color: #4338ca;
+}
+
+.btn-action-amber {
+    background-color: #f59e0b;
+}
+
+.btn-action-amber:hover {
+    background-color: #d97706;
+}
+
+.btn-action-red {
+    background-color: #ef4444;
+}
+
+.btn-action-red:hover {
+    background-color: #dc2626;
+}
+
+/* Stats Grid on Detail Page */
+.project-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.project-stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.project-stat-label {
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.project-stat-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+/* Back Link Legacy */
 .back-link {
     color: #3b82f6;
     text-decoration: none;
@@ -87,32 +241,6 @@
 
 .back-link:hover {
     text-decoration: underline;
-}
-
-.project-header-info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.project-icon-large {
-    font-size: 4rem;
-}
-
-.project-title {
-    font-size: 1.8rem;
-    margin-bottom: 5px;
-}
-
-.project-desc {
-    color: #6b7280;
-    font-size: 1rem;
-    margin-bottom: 15px;
-}
-
-.header-actions {
-    display: flex;
-    gap: 10px;
 }
 
 /* ============================================================
@@ -401,5 +529,84 @@
         text-align: center;
         box-sizing: border-box;
     }
+
+    /* Detail Project Page Mobile Adjustments */
+    .project-detail-back-bar .btn-back-nav {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+
+    .project-detail-card {
+        padding: 16px;
+    }
+
+    .project-header-info {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .project-brand-box {
+        flex-direction: row;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .project-icon-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .project-icon-large {
+        font-size: 2.8rem;
+    }
+
+    .project-title {
+        font-size: 1.35rem;
+    }
+
+    .project-desc {
+        font-size: 0.9rem;
+    }
+
+    .header-actions {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .header-actions button,
+    .header-actions a,
+    .header-actions .detail-delete-form {
+        flex: 1 1 calc(50% - 6px);
+        margin: 0 !important;
+        text-align: center;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 9px 12px;
+        font-size: 0.85rem;
+    }
+
+    .header-actions .detail-delete-form button {
+        width: 100%;
+    }
+
+    .project-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .project-stat-card {
+        padding: 20px;
+    }
+
+    .project-stat-number {
+        font-size: 2.5rem;
+    }
 }
+
 
